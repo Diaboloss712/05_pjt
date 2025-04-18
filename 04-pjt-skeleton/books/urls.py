@@ -10,4 +10,5 @@ urlpatterns = [
     path("<int:pk>/update/", views.update, name="update"),
     path("<int:pk>/delete/", views.delete, name="delete"),
     path("<int:pk>/create/", views.thread_create, name='thread_create'),
+    path("<int:pk>/threads/<int:thread_pk>/", views.thread_detail, name='thread_detail'),
 ]

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Book
+from .models import Book, Thread
 from .forms import ThreadForm, BookForm
 from .utils import (
     process_wikipedia_info,
@@ -86,3 +86,13 @@ def thread_create(request, pk):
         form = ThreadForm()
     context = {"form": form}
     return render(request, "threads/create.html", context)
+
+
+def thread_detail(request, pk, thread_pk):
+    book = Book.objects.get(pk=pk)
+    thread = Thread.objects.get(pk=thread_pk)
+    context = {
+        'thread':thread,
+        'book':book,
+    }
+    return render(request, "threads/detail.html", context)
