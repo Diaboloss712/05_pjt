@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book
+from .models import Book, Thread
 
 
 class BookForm(forms.ModelForm):
@@ -11,3 +11,8 @@ class BookForm(forms.ModelForm):
             "author_works",
             "audio_file",
         ]
+
+class ThreadForm(forms.ModelForm):
+    class Meta:
+        model = Thread
+        fields = ('title', 'content', 'reading_date',)
