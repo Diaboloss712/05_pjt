@@ -1,6 +1,6 @@
 from django import forms
-from .models import User  # 여기에서 커스텀 User 모델을 가져와야 합니다.
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from .models import User
 
 # 로그인 폼
 class UserLoginForm(forms.Form):
@@ -17,7 +17,7 @@ class UserUpdateForm(forms.ModelForm):
         }
 
 # 사용자 등록 폼
-class UserForm(forms.ModelForm):
+class UserForm(UserCreationForm):  # UserCreationForm을 커스터마이즈된 User 모델로 수정
     class Meta:
         model = User  # 커스텀 User 모델 사용
         fields = ['username', 'email', 'first_name', 'last_name', 'followers']
@@ -27,7 +27,6 @@ class UserForm(forms.ModelForm):
 
 # 비밀번호 변경 폼 
 class CustomPasswordChangeForm(PasswordChangeForm):
-    
     new_password1 = forms.CharField(widget=forms.PasswordInput, required=True)
     new_password2 = forms.CharField(widget=forms.PasswordInput, required=True)
     old_password = forms.CharField(widget=forms.PasswordInput, required=True)
