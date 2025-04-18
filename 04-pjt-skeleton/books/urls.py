@@ -12,4 +12,5 @@ urlpatterns = [
     path("<int:pk>/create/", views.thread_create, name='thread_create'),
     path("<int:pk>/threads/<int:thread_pk>/", views.thread_detail, name='thread_detail'),
     path("<int:pk>/threads/<int:thread_pk>/update/", views.thread_update, name='thread_update'),
+    path("<int:pk>/threads/<int:thread_pk>/delete/", views.thread_delete, name='thread_delete'),
 ]
