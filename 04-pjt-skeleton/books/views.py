@@ -76,7 +76,8 @@ def update(request, pk):
 @login_required
 def delete(request, pk):
     book = Book.objects.get(pk=pk)
-    book.delete()
+    if request.user == book.user_id:
+        book.delete()
     return redirect("books:index")
 
 @login_required
@@ -118,3 +119,10 @@ def thread_update(request, pk, thread_pk):
         "thread": thread,
     }
     return render(request, "threads/update.html", context)
+
+@login_required
+def thread_delete(request, thread_pk):
+    thread = Thread.objects.get(pk=thread_pk)
+    if request.user == thread.user:
+        thread.delete()
+    return redirect('book:thread_detail', thread_pk, thread_pk)
