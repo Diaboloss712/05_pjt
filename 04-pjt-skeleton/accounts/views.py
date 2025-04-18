@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from .forms import UserUpdateForm, UserLoginForm
+from .forms import UserUpdateForm, UserLoginForm, UserForm  # 수정된 UserForm 사용
 from .models import User
 
 # 로그인
@@ -28,12 +28,12 @@ def logout_view(request):
 # 회원가입
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserForm(request.POST)  # 수정된 UserForm 사용
         if form.is_valid():
             form.save()  # 새 사용자 저장
             return redirect('index')  # 저장 후 index 페이지로 리다이렉트
     else:
-        form = UserCreationForm()
+        form = UserForm()
     return render(request, 'accounts/signup.html', {'form': form})
 
 # 회원 정보 수정
@@ -77,3 +77,6 @@ def follow(request, user_id):
     else:
         request.user.followers.add(user_to_follow)  # 팔로우 추가
     return redirect('profile')  # 팔로우 후 프로필로 리다이렉트
+
+def index(request):
+    return render(request, 'accounts/index.html')
