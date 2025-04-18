@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Book, Thread
+from accounts .models import User
 from .forms import ThreadForm, BookForm
 from .utils import (
     process_wikipedia_info,
@@ -31,6 +32,7 @@ def create(request):
             )
             book.author_info = author_info
             book.author_works = author_works
+            book.user = request.user
             book.save()
 
             audio_script = generate_audio_script(book, wiki_summary)
@@ -46,7 +48,6 @@ def create(request):
     context = {"form": form}
     return render(request, "books/create.html", context)
 
-@login_required
 def detail(request, pk):
     book = Book.objects.get(pk=pk)
     context = {
@@ -57,7 +58,7 @@ def detail(request, pk):
 @login_required
 def update(request, pk):
     book = Book.objects.get(pk=pk)
-    if request.user != book.user:
+    if request.user != book.user_id:
         return redirect('books:detail', pk)
     if request.method == "POST":
         form = BookForm(request.POST, request.FILES, instance=book)
