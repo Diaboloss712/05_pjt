@@ -1,4 +1,5 @@
 from django.db import models
+from accounts import User
 
 
 class Book(models.Model):
@@ -11,3 +12,13 @@ class Book(models.Model):
     author_works = models.CharField(max_length=50)
     cover_image = models.ImageField(blank=True)
     audio_file = models.FileField(upload_to="tts/", blank=True, null=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Thread(models.Model):
+    book_id = models.ForeignKey(Book, related_name='threads', on_delete=models.CASCADE)
+    title = models.CharField(max_length=20)
+    content = models.TextField()
+    reading_date = models.DateField()
+    cover_img = models.ImageField(blank=True)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
