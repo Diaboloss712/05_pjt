@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from .models import Book, Thread
 from .forms import ThreadForm, BookForm
 from .utils import (
@@ -16,7 +17,7 @@ def index(request):
     }
     return render(request, "books/index.html", context)
 
-
+@login_required
 def create(request):
     if request.method == "POST":
         form = BookForm(request.POST, request.FILES)
@@ -45,7 +46,7 @@ def create(request):
     context = {"form": form}
     return render(request, "books/create.html", context)
 
-
+@login_required
 def detail(request, pk):
     book = Book.objects.get(pk=pk)
     context = {
@@ -53,9 +54,11 @@ def detail(request, pk):
     }
     return render(request, "books/detail.html", context)
 
-
+@login_required
 def update(request, pk):
     book = Book.objects.get(pk=pk)
+    if request.user != book.user:
+        return redirect('books:detail', pk)
     if request.method == "POST":
         form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
@@ -69,13 +72,13 @@ def update(request, pk):
     }
     return render(request, "books/update.html", context)
 
-
+@login_required
 def delete(request, pk):
     book = Book.objects.get(pk=pk)
     book.delete()
     return redirect("books:index")
 
-
+@login_required
 def thread_create(request, pk):
     if request.method == "POST":
         form = ThreadForm(request.POST, request.FILES)
@@ -97,9 +100,11 @@ def thread_detail(request, pk, thread_pk):
     }
     return render(request, "threads/detail.html", context)
 
-
+@login_required
 def thread_update(request, pk, thread_pk):
     thread = Thread.objects.get(pk=thread_pk)
+    if request.user != thread.user:
+        return redirect('book:thread_detail', pk, thread_pk)
     if request.method == "POST":
         form = ThreadForm(request, data=request.POST)
         if form.is_valid():
@@ -111,4 +116,4 @@ def thread_update(request, pk, thread_pk):
         "form": form,
         "thread": thread,
     }
-    return render(request, "threads/update.html")
+    return render(request, "threads/update.html", context)
