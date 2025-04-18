@@ -96,3 +96,19 @@ def thread_detail(request, pk, thread_pk):
         'book':book,
     }
     return render(request, "threads/detail.html", context)
+
+
+def thread_update(request, pk, thread_pk):
+    thread = Thread.objects.get(pk=thread_pk)
+    if request.method == "POST":
+        form = ThreadForm(request, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("books:detail", pk)
+    else:
+        form = ThreadForm(request)
+    context = {
+        "form": form,
+        "thread": thread,
+    }
+    return render(request, "threads/update.html")
