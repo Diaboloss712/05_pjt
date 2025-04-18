@@ -1,5 +1,5 @@
 from django.db import models
-from accounts import User
+from accounts .models import User
 
 
 class Book(models.Model):
