@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2>{{ thread.title }}</h2>
+<p>
+  도서: {{book.title}} 작성자: {{thread.userid}} 독서일: {{thread.read_date}}
+</p>
+<p>{{ book.description }}</p>
+<p>{{thread.content}}</p>
+
+{% endblock content %}
